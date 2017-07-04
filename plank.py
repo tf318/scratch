@@ -23,24 +23,20 @@ def plank_structures(n, m):
         sub_sequences = set()
         for i in range(x):
             for combo in plank_combinations[i]:
-                sub_sequences.add((x - i,) + combo)
+                if x - i <= m:
+                    sub_sequences.add((x - i,) + combo)
         plank_combinations.append(list(sub_sequences))
 
-    # lastly filter out all the plank combinations that involve component
-    # planks that are larger than m. This is not very efficient, but it works:
-    for combo in plank_combinations[n]:
-        if max(combo) <= m:
-            yield combo
+    return plank_combinations[n]
 
 def solution_length(n, m):
     """Return total number of plank_structures(n, m) solutions"""
-
     return len(list(plank_structures(n, m)))
 
 def main():
     """Parse arguments and print number of plank_structures(n, m) solutions"""
-    if len(sys.argv) != 3:
-        print("Usage: python plank.py [n] [m]")
+    if len(sys.argv) != 3 or int(sys.argv[1]) < int(sys.argv[2]):
+        print("Usage: python plank.py [n] [m] (where n >= m)")
         sys.exit(1)
 
     print(solution_length(int(sys.argv[1]), int(sys.argv[2])))
